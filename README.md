@@ -1,4 +1,4 @@
-# Mi Task Manager
+# Task Manager
 
 Mi Task Manager es una aplicación API desarrollada en Go que permite la gestión de tareas, incluyendo la creación, lectura, actualización y eliminación de tareas. Utiliza el enrutador [Chi](https://github.com/go-chi/chi) para manejar las rutas HTTP y [GORM](https://gorm.io/) para la interacción con una base de datos PostgreSQL.
 
