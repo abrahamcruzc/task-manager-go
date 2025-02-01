@@ -3,6 +3,7 @@ module github.com/abrahamcruzc/task-manager-go
 go 1.23.4
 
 require (
+	github.com/go-chi/chi/v5 v5.2.0
 	github.com/joho/godotenv v1.5.1
 	github.com/spf13/viper v1.19.0
 	gorm.io/driver/postgres v1.5.11
