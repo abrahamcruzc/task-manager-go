@@ -29,15 +29,30 @@ func (c *Config) LoadConfig() error {
 	// Lee las variables de entorno del sistema
 	viper.AutomaticEnv()
 
+ 	// Establece explícitamente las variables
+    c.DBHost = viper.GetString("DB_HOST")
+    c.DBPort = viper.GetString("DB_PORT")
+    c.DBUser = viper.GetString("DB_USER")
+    c.DBPassword = viper.GetString("DB_PASSWORD")
+    c.DBName = viper.GetString("DB_NAME")
+    c.SSLMode = viper.GetString("SSL_MODE")
+
+    // Verifica que todas las variables necesarias estén establecidas
+    if c.DBUser == "" || c.DBPassword == "" || c.DBName == "" {
+        return fmt.Errorf("Faltan variables de entorno necesarias")
+    }
+	
 	// Asignar valores por defecto
 	viper.SetDefault("DB_HOST", "0.0.0.0")
-	viper.SetDefault("DB_PORT", "80")
+	viper.SetDefault("DB_PORT", "5432")
 	viper.SetDefault("SSL_MODE", "disable")
 
 	// Cargar la configuración en la estructura LoadConfig
 	if err := viper.Unmarshal(c); err != nil {
 		return fmt.Errorf("Error al cargar la configuración %v", err)
 	}
+	
+	log.Printf("Configuración cargada: %v", c)
 
 	return nil
 }
@@ -52,7 +67,7 @@ func (c *Config) InitDb() (*gorm.DB, error) {
 	// Conecta a la base de datos
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return nil, fmt.Errorf("Error al conectarse a la base de datos %v", err)
+		return nil, fmt.Errorf("Error al conectarse a la base de datos: %v", err)
 	}
 
 	log.Println("Conexión a la base de datos establecida")
