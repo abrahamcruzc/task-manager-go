@@ -1,0 +1,41 @@
+# Compilables y binarios
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Binarios generados por pruebas
+*.test
+
+# Archivos de salida de cobertura de pruebas
+*.out
+
+# Archivos temporales y directorios de compilación
+/build/
+bin/
+tmp/
+
+# Archivos de configuración y entornos locales (si se usan para desarrollo)
+.env
+.env.local
+
+# Archivos y directorios de IDEs y editores
+.vscode/
+.idea/
+*.swp
+*~
+
+# Archivos de logs
+*.log
+
+# Archivos generados por Go Workspace (si aplica)
+go.work
+go.work.sum
+
+# Directorio vendor (opcional: si decides no versionar las dependencias)
+vendor/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
