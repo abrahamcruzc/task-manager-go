@@ -3,9 +3,9 @@ package config
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -24,29 +24,24 @@ type Config struct {
 // LoadConfig carga la configuración desde variables de entorno y .env
 // Flujo de ejecución:
 // 1. Intenta cargar archivo .env
-// 2. Carga variables de entorno del sistema
-// 3. Establece valores por defecto
-// 4. Valida campos requeridos
+// 2. Asigna variables de entorno del sistema
+// 3. Valida campos requeridos
 func (c *Config) LoadConfig() error {
 	// 1. Carga archivo .env (si existe)
 	if err := godotenv.Load(); err != nil {
 		log.Println("No se encontró el archivo .env. Usando variables de entorno del sistema.")
 	}
 
-	// 2. Configura lectura de variables de entorno
-	viper.AutomaticEnv()
+	// 2. Asigna valores directamente desde las variables de entorno
+	c.DBHost = os.Getenv("DB_HOST")
+	c.DBPort = os.Getenv("DB_PORT")
+	c.DBUser = os.Getenv("DB_USER")
+	c.DBPassword = os.Getenv("DB_PASSWORD")
+	c.DBName = os.Getenv("DB_NAME")
+	c.SSLMode = os.Getenv("SSL_MODE")
+	
 
-	// 3. Establece valores por defecto para parámetros opcionales
-	viper.SetDefault("DB_HOST", "localhost")
-	viper.SetDefault("DB_PORT", "5432")
-	viper.SetDefault("SSL_MODE", "disable")
-
-	// 4. Mapea las variables a la estructura Config
-	if err := viper.Unmarshal(c); err != nil {
-		return fmt.Errorf("error al cargar configuración: %v", err)
-	}
-
-	// 5. Valida campos obligatorios
+	// 3. Valida campos obligatorios
 	if c.DBUser == "" || c.DBPassword == "" || c.DBName == "" {
 		return fmt.Errorf("configuración incompleta: DB_USER, DB_PASSWORD y DB_NAME son requeridos")
 	}
@@ -77,11 +72,11 @@ func (c *Config) InitDb() (*gorm.DB, error) {
 		return nil, fmt.Errorf("fallo en conexión a PostgreSQL: %v\nDSN usado: %s", err, dsn)
 	}
 
-	// Configuración adicional recomendada
+	// Configuración adicional 
 	sqlDB, _ := db.DB()
-	sqlDB.SetMaxIdleConns(10)       // Conexiones inactivas máximas
-	sqlDB.SetMaxOpenConns(100)      // Conexiones abiertas máximas
-	sqlDB.SetConnMaxLifetime(30)    // Tiempo máximo de vida de conexión (minutos)
+	sqlDB.SetMaxIdleConns(10)    // Conexiones inactivas máximas
+	sqlDB.SetMaxOpenConns(100)   // Conexiones abiertas máximas
+	sqlDB.SetConnMaxLifetime(30) // Tiempo máximo de vida de conexión (minutos)
 
 	log.Println("Conexión a PostgreSQL establecida exitosamente")
 	return db, nil
