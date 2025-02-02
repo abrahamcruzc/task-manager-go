@@ -22,6 +22,8 @@ func main() {
 	}
 
 	log.Println("Base de datos iniciada correctamente")
+	
+	// Realiza las migraciones
 	db.AutoMigrate(conf)
 
 }
