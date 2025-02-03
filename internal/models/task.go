@@ -64,9 +64,9 @@ func (Status) ValidValues() []string {
 // Campos GORM: ID, CreatedAt, UpdatedAt, DeletedAt (embedded)
 type Task struct {
 	gorm.Model
-	Name        string `gorm:"uniqueIndex;not null;size:100"` // Nombre único con máximo 100 caracteres
-	Description string `gorm:"size:255;not null"`             // Descripción con máximo 255 caracteres
-	Status      Status `gorm:"type:varchar(20);default:'To do';not null"` // Estado con valor por defecto
+	Name        string `gorm:"uniqueIndex;not null;size:100" json:"name"` // Nombre único con máximo 100 caracteres
+	Description string `gorm:"size:255;not null" json:"description"`             // Descripción con máximo 255 caracteres
+	Status      Status `gorm:"type:varchar(20);default:'To do';not null" json:"status"` // Estado con valor por defecto
 }
 
 // BeforeSave hook de ciclo de vida de GORM para validación automática

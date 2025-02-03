@@ -15,6 +15,7 @@
 /build/
 bin/
 tmp/
+cmd/tmp
 
 # Archivos de configuración y entornos locales (si se usan para desarrollo)
 .env
