@@ -1,0 +1,95 @@
+/* Estilos globales */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/* Encabezado */
+header {
+  background-color: #1a73e8;
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+}
+header h1 {
+  margin: 0;
+}
+
+/* Botón */
+.button {
+  background-color: #34a853;
+  border: none;
+  padding: 0.5rem 1rem;
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 1rem;
+  text-decoration: none;
+}
+.button:hover {
+  background-color: #2c8f45;
+}
+
+/* Contenedor de la lista de tareas */
+#task-list {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: none; /* Oculto por defecto */
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Mostrar el modal cuando el checkbox está marcado */
+#modal-toggle:checked ~ #modal {
+  display: flex;
+}
+
+/* Contenido del modal */
+.modal-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+/* Botón de cierre */
+.close-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: #ccc;
+  color: #333;
+  padding: 0.2rem 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Responsividad */
+@media (max-width: 600px) {
+  #task-list {
+    margin: 1rem;
+    padding: 0.5rem;
+  }
+}

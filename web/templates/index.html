@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .task-item {
+            background: #f3f4f6;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            color: white;
+        }
+
+        .status-todo { background: var(--warning); }
+        .status-in-progress { background: var(--primary); }
+        .status-completed { background: var(--success); }
+
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        form {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+    </style>
+</head>
+<body>
+    <h1>Task Manager</h1>
+    
+    <!-- Formulario de creación -->
+    <form hx-post="/tasks" hx-target="#task-list" hx-swap="afterbegin">
+        <div class="form-group">
+            <input type="text" name="name" placeholder="Task name" required>
+        </div>
+        <div class="form-group">
+            <textarea name="description" placeholder="Description"></textarea>
+        </div>
+        <div class="form-group">
+            <select name="status">
+                <option value="To do">To do</option>
+                <option value="In progress">In progress</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+        <button type="submit" class="btn-primary">Create Task</button>
+    </form>
+
+    <!-- Lista de tareas -->
+    <ul id="task-list" class="task-list" hx-get="/tasks" hx-trigger="load">
+        <!-- Las tareas se cargarán aquí mediante HTMX -->
+    </ul>
+
+    <!-- Template para nuevas tareas (usado por HTMX) -->
+    <template id="task-template">
+        <li class="task-item" hx-swap="outerHTML">
+            <div>
+                <h3>{name}</h3>
+                <p>{description}</p>
+                <span class="task-status status-{status_slug}">{status}</span>
+            </div>
+            <div class="task-actions">
+                <button class="btn-primary" 
+                        hx-get="/tasks/{id}/edit" 
+                        hx-target="closest li">Edit</button>
+                <button class="btn-danger" 
+                        hx-delete="/tasks/{id}" 
+                        hx-target="closest li" 
+                        hx-confirm="Are you sure?">Delete</button>
+            </div>
+        </li>
+    </template>
+</body>
+</html>
