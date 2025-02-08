@@ -61,8 +61,8 @@ func SetupRoutes(db *gorm.DB) http.Handler {
 	)
 
 
-	// Servir archivos estáticos desde /static (CSS, imágenes, etc.)
-	//r.Mount("/static", http.StripPrefix("/static", http.FileServer(http.Dir("./web/static"))))
+	//Servir archivos estáticos desde /static (CSS, imágenes, etc.)
+	r.Mount("/static", http.StripPrefix("/static", http.FileServer(http.Dir("./web/static"))))
 
 	// Ruta para servir el frontend (HTML)
 	r.Get("/", ServeFrontend)
