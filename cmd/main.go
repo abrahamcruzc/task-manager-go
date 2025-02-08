@@ -3,7 +3,9 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 
+	"gorm.io/gorm"
 	"github.com/abrahamcruzc/task-manager-go/internal/config"
 	"github.com/abrahamcruzc/task-manager-go/internal/models"
 	"github.com/abrahamcruzc/task-manager-go/internal/routes"
@@ -22,9 +24,22 @@ func main() {
 
 	// 2. Inicializar la base de datos
 	// Se utiliza la configuración cargada para establecer una conexión con la base de datos a través de GORM.
-	db, err := cfg.InitDb()
+	var db *gorm.DB
+	var err error
+	maxRetries := 10               // Número máximo de intentos
+	retryInterval := 5 * time.Second // Intervalo entre intentos
+
+	for i := 1; i <= maxRetries; i++ {
+		db, err = cfg.InitDb()
+		if err == nil {
+			log.Println("¡La base de datos está disponible!")
+			break // Salimos del bucle cuando la conexión es exitosa
+		}
+		log.Printf("Intento %d/%d: La base de datos aún no está disponible: %v", i, maxRetries, err)
+		time.Sleep(retryInterval)
+	}
 	if err != nil {
-		log.Fatalf("Error conecting to the database: %v", err)
+		log.Fatalf("No se pudo conectar a la base de datos después de %d intentos: %v", maxRetries, err)
 	}
 
 	// 3. Migrar modelos

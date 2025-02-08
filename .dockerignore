@@ -1,0 +1,7 @@
+vendor/
+bin/
+.env
+*.log
+*.db
+.DS_Store
+.git/
